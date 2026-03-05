@@ -68,13 +68,14 @@ function App() {
     <>
       {/* Brand Header */}
       <header className="bg-bg-header border-b-2 border-brand-orange shadow-[0_4px_20px_rgba(0,0,0,0.2)] sticky top-0 z-50">
-        <div className="max-w-[1200px] mx-auto h-[70px] md:h-[80px] flex justify-center items-center">
+        <div className="max-w-[1200px] mx-auto py-4 md:py-5 px-4 flex justify-center items-center">
           <div className="flex items-center gap-4">
-            <svg className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 24 L12 24 L12 16 L20 16 L20 8 L28 8" stroke="var(--color-brand-orange)" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter" />
-              <path d="M12 24 L28 8" stroke="var(--color-brand-orange)" strokeWidth="1" strokeDasharray="2 4" />
-            </svg>
-            <div className="font-rajdhani text-[22px] md:text-[28px] font-bold tracking-[2px] text-text-primary">
+            <img 
+              src="/correct.png" 
+              alt="The Correct Steps Logo" 
+              className="h-[50px] md:h-[70px] w-auto object-contain"
+            />
+            <div className="font-rajdhani text-[24px] md:text-[32px] font-bold tracking-[2px] text-text-primary">
               THE CORRECT <span className="text-brand-orange">STEPS</span>
             </div>
           </div>
@@ -305,7 +306,7 @@ function App() {
           {/* Note & Submit Block */}
           {!submitted ? (
             <>
-              {/* Note for Students - Now matches the form card width perfectly */}
+              {/* Note for Students */}
               <div className="bg-[#20252a] rounded-lg overflow-hidden mb-8 border border-border-custom shadow-[0_10px_30px_rgba(0,0,0,0.15)] p-6 md:p-8 transition-all duration-300 hover:border-brand-orange/30">
                 <div className="flex items-center gap-3 text-brand-orange mb-4">
                   <svg className="w-[22px] h-[22px] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
