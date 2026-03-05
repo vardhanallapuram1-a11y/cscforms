@@ -61,13 +61,14 @@ function App() {
     })
 
     try {
-      const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+      const res = await fetch('https://formspree.io/f/xdawnzdp', {
         method: 'POST',
         body: formDataToSend,
         headers: { 'Accept': 'application/json' }
       })
       if (res.ok) {
         setSubmitted(true)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } else {
         alert('Submission failed. Please try again.')
         setIsSubmitting(false)
@@ -327,8 +328,32 @@ function App() {
             ) : (
               <div id="successMsg" className="success-msg">
                 <div className="check">&#10003;</div>
-                <h3>Registration Submitted</h3>
-                <p>Your registration has been received. A confirmation will be sent to your email within 48 hours.</p>
+                <h3>Registration Successful</h3>
+                <p>Your details have been securely transmitted to the workshop team.</p>
+                <p style={{ marginTop: '12px', color: 'var(--text-muted)', fontSize: '12px' }}>
+                  A confirmation email will be sent to <strong>{formData.email}</strong> after verification.
+                </p>
+                <div style={{ marginTop: '32px' }}>
+                  <button
+                    onClick={() => {
+                      setSubmitted(false);
+                      setIsSubmitting(false);
+                      setFormData({
+                        university_name: '', department: '', name: '', roll_no: '', email: '', phone: '',
+                        branch: '', year: '', date: '', time: '', location: '', reg_fee: '',
+                        amount_paid: '', payment_method: '', transaction_id: '', bank_name: '',
+                        utr_no: '', cheque_no: '', issuing_bank: '', prior_exp: '',
+                        software_used: '', expectations: '', decl_accuracy: false,
+                        decl_rules: false, decl_media: false
+                      });
+                      setPaymentMethod('');
+                    }}
+                    className="btn-submit"
+                    style={{ padding: '12px 32px', fontSize: '13px' }}
+                  >
+                    Register Another Student
+                  </button>
+                </div>
               </div>
             )}
           </div>
