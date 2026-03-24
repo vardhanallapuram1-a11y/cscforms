@@ -1,71 +1,91 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #2a3342;
+@theme {
+  /* High-Tech Industrial Color Palette */
+  --color-bg-deep: #1a1e24;
+  --color-bg-header: #22272e;
+  --color-bg-card: #272d35;
+  --color-bg-section: #20242b;
+  --color-bg-input: #1b1f25;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  --color-border-custom: rgba(255, 255, 255, 0.08);
+  --color-border-focus: #f5a623;
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
+  --color-brand-orange: #f5a623;
+  --color-brand-hover: #f39c12;
+  --color-brand-glow: rgba(245, 166, 35, 0.15);
 
-a:hover {
-  color: #535bf2;
-}
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cdd6e5;
+  --color-text-muted: #8b96a5;
+  --color-text-label: #a4b0be;
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
+  /* Typography */
+  --font-exo: 'Exo 2', sans-serif;
+  --font-rajdhani: 'Rajdhani', sans-serif;
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+  /* Custom Animations */
+  --animate-fade-up: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-up-fast: fadeUp 0.3s ease both;
+  --animate-dash: dash 1.5s ease-in-out infinite;
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
 
-button:hover {
-  border-color: #646cff;
-}
-
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  a:hover {
-    color: #747bff;
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border-custom outline-none;
   }
 
-  button {
-    background-color: #f9f9f9;
+  body {
+    @apply bg-bg-deep text-text-primary font-exo min-h-screen pb-20 antialiased m-0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-rajdhani;
+  }
+
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-bg-deep;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-brand-orange/40 transition-colors;
   }
 }
