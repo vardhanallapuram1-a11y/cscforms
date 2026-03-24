@@ -9,16 +9,40 @@ function App() {
     cheque_no: '', prior_exp: '', expectations: '', decl_accuracy: false, decl_rules: false
   })
 
+  // Course Registration State
+  const [courseStep, setCourseStep] = useState(1)
+  const [courseFormData, setCourseFormData] = useState({
+    // Step 1: Personal & Contact
+    name: '', dob: '', gender: '',
+    email: '', mobile: '', alt_phone: '',
+    city: '', state: '', pincode: '', country: 'India',
+    // Step 2: Academic & Course
+    qualification: '', university: '', status: '',
+    course_category: '', specific_course: '',
+    learning_mode: 'Online', batch_preference: '', start_month: '',
+    experience_level: '', career_goal: '',
+    referral_source: '', referral_code: '',
+    payment_plan: '', coupon_code: '',
+    decl_accuracy: false, decl_terms: false
+  })
+
   const [paymentMethod, setPaymentMethod] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }))
+    if (view === 'course') {
+      setCourseFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }))
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }))
+    }
   }
 
   const handlePaymentChange = (e) => {
@@ -35,8 +59,9 @@ function App() {
     setIsSubmitting(true)
 
     const formDataToSend = new FormData()
-    Object.keys(formData).forEach(key => {
-      formDataToSend.append(key, formData[key])
+    const dataToSubmit = view === 'course' ? courseFormData : formData
+    Object.keys(dataToSubmit).forEach(key => {
+      formDataToSend.append(key, dataToSubmit[key])
     })
 
     try {
@@ -59,11 +84,11 @@ function App() {
   }
 
   // Extracted repetitive Tailwind class strings
-  const inputBaseClass = "bg-bg-input border-2 border-transparent border-b-white/10 rounded-t text-text-primary font-exo text-[16px] p-4 w-full outline-none transition-all duration-300 placeholder-text-muted focus:border-b-brand-orange focus:bg-brand-glow";
-  const labelClass = "text-[14px] font-semibold tracking-[1px] uppercase text-text-label flex gap-1";
-  const formCardClass = "bg-bg-card rounded-lg overflow-hidden mb-8 border border-border-custom shadow-[0_10px_30px_rgba(0,0,0,0.15)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_15px_35px_rgba(0,0,0,0.25)] hover:border-brand-orange/20";
-  const sectionHeaderClass = "bg-bg-section border-b border-border-custom px-5 py-4 md:px-8 md:py-5 flex items-center gap-4 border-l-4 border-l-brand-orange";
-  const radioOptionClass = "flex items-center gap-2.5 cursor-pointer px-5 py-3.5 bg-bg-input border border-border-custom rounded-md transition-all duration-300 text-[15px] text-text-secondary font-semibold flex-1 justify-center relative overflow-hidden hover:border-brand-orange hover:text-text-primary has-[:checked]:border-brand-orange has-[:checked]:bg-brand-orange has-[:checked]:text-bg-deep";
+  const formCardClass = "bg-bg-card border border-border-custom rounded-xl mb-7 overflow-hidden transition-all duration-300 hover:border-brand-orange/30 shadow-[0_4px_20px_rgba(0,0,0,0.2)]"
+  const sectionHeaderClass = "bg-bg-input/30 border-b border-border-custom p-4 md:p-5 flex items-center gap-4"
+  const labelClass = "font-rajdhani font-bold text-[14px] md:text-[15px] uppercase tracking-[1px] text-text-secondary"
+  const inputBaseClass = "bg-bg-input border-2 border-border-custom rounded-md p-3.5 md:p-4 text-text-primary text-[15px] md:text-[16px] outline-none transition-all duration-300 focus:border-brand-orange/50 focus:shadow-[0_0_0_4px_rgba(245,166,35,0.05)] placeholder:text-text-muted/50 w-full"
+  const radioOptionClass = "relative flex-1 min-w-[120px] bg-bg-input border-2 border-border-custom rounded-md p-3 md:p-4 flex items-center justify-center text-center cursor-pointer transition-all duration-300 hover:border-brand-orange/30 has-[:checked]:border-brand-orange has-[:checked]:bg-brand-glow has-[:checked]:text-brand-orange font-rajdhani font-bold text-[15px] md:text-[16px] uppercase tracking-[1px]"
 
   const renderHome = () => (
     <div className="w-full max-w-[900px] mx-auto mt-16 px-5 animate-fade-up">
@@ -79,7 +104,7 @@ function App() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
         {/* Course Registration Card */}
         <div
-          onClick={() => alert('Course Registration portal is currently under maintenance.')}
+          onClick={() => setView('course')}
           className="group relative bg-bg-card border border-border-custom rounded-xl p-8 cursor-pointer overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-brand-orange/40 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-brand-orange/5 rounded-bl-full -mr-10 -mt-10 transition-all duration-500 group-hover:bg-brand-orange/10 group-hover:scale-110"></div>
@@ -94,7 +119,7 @@ function App() {
               Access comprehensive courses in mechanical design, structural analysis, and thermal engineering.
             </p>
             <div className="flex items-center gap-2 text-brand-orange font-bold text-[14px] uppercase tracking-[1px]">
-              Coming Soon <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+              Access Portal <svg className="w-4 h-4 animate-bounce-x" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
             </div>
           </div>
         </div>
@@ -124,6 +149,357 @@ function App() {
     </div>
   )
 
+  const renderCourseForm = () => (
+    <div className="w-full max-w-[850px] mx-auto mt-[60px] px-5 animate-fade-up">
+      <button
+        onClick={() => setView('home')}
+        className="flex items-center gap-2 text-text-muted mb-8 hover:text-brand-orange transition-colors duration-300 font-semibold uppercase tracking-[1px] text-[13px]"
+      >
+        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+        Back to Selection
+      </button>
+
+      <div className="mb-12 text-center">
+        <h1 className="font-rajdhani text-[32px] md:text-[42px] font-bold uppercase tracking-[1.5px] text-text-primary mb-3 leading-tight">
+          THE CORRECT STEPS – <span className="text-brand-orange">CAD, CAE & DESIGN COURSES</span>
+        </h1>
+        <div className="flex justify-center items-center gap-4 mt-8">
+          <div className={`flex items-center gap-3 ${courseStep === 1 ? 'text-brand-orange' : 'text-text-muted'}`}>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold border-2 ${courseStep === 1 ? 'border-brand-orange bg-brand-glow' : 'border-text-muted'}`}>1</span>
+            <span className="font-rajdhani font-bold tracking-[1px] uppercase hidden md:inline">Personal Information</span>
+          </div>
+          <div className="w-12 h-[2px] bg-border-custom"></div>
+          <div className={`flex items-center gap-3 ${courseStep === 2 ? 'text-brand-orange' : 'text-text-muted'}`}>
+            <span className={`w-8 h-8 rounded-full flex items-center justify-center font-bold border-2 ${courseStep === 2 ? 'border-brand-orange bg-brand-glow' : 'border-text-muted'}`}>2</span>
+            <span className="font-rajdhani font-bold tracking-[1px] uppercase hidden md:inline">Academic & Course</span>
+          </div>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        {courseStep === 1 ? (
+          <div className="animate-fade-up">
+            {/* 01: Personal Details */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">01</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Personal Details</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-y-7 md:gap-x-8">
+                  <div className="flex flex-col gap-2.5 md:col-span-2">
+                    <label className={labelClass}>Full Name <span className="text-brand-orange">*</span></label>
+                    <input type="text" name="name" className={inputBaseClass} placeholder="Enter your full name" value={courseFormData.name} onChange={handleChange} required />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Date of Birth <span className="text-brand-orange">*</span></label>
+                    <input type="date" name="dob" className={inputBaseClass} value={courseFormData.dob} onChange={handleChange} required />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Gender <span className="text-brand-orange">*</span></label>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                      {['Male', 'Female', 'Other'].map(g => (
+                        <label key={g} className={`${radioOptionClass} min-w-0`}>
+                          <input type="radio" name="gender" value={g} checked={courseFormData.gender === g} onChange={handleChange} required className="absolute opacity-0" />
+                          <span>{g}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 02: Contact Information */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">02</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Contact Information</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-y-7 md:gap-x-8">
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Email Address <span className="text-brand-orange">*</span></label>
+                    <input type="email" name="email" className={inputBaseClass} placeholder="Email address" value={courseFormData.email} onChange={handleChange} required />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Mobile Number <span className="text-brand-orange">*</span></label>
+                    <input type="tel" name="mobile" className={inputBaseClass} placeholder="Mobile number" value={courseFormData.mobile} onChange={handleChange} required />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Alternate Phone</label>
+                    <input type="tel" name="alt_phone" className={inputBaseClass} placeholder="Optional" value={courseFormData.alt_phone} onChange={handleChange} />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>City <span className="text-brand-orange">*</span></label>
+                    <input type="text" name="city" className={inputBaseClass} placeholder="Enter your city" value={courseFormData.city} onChange={handleChange} required />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>State <span className="text-brand-orange">*</span></label>
+                    <input type="text" name="state" className={inputBaseClass} placeholder="Enter your state" value={courseFormData.state} onChange={handleChange} required />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Pincode <span className="text-brand-orange">*</span></label>
+                    <input type="text" name="pincode" className={inputBaseClass} placeholder="6-digit pincode" value={courseFormData.pincode} onChange={handleChange} required />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mb-16">
+              <button
+                type="button"
+                onClick={() => setCourseStep(2)}
+                className="bg-brand-orange text-bg-deep font-rajdhani text-[18px] font-bold tracking-[2px] border-none rounded-md py-4 px-10 cursor-pointer transition-all duration-300 shadow-[0_4px_15px_rgba(245,166,35,0.2)] hover:bg-brand-hover hover:-translate-y-1"
+              >
+                NEXT: ACADEMIC DETAILS
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="animate-fade-up">
+            {/* 03: Educational Background */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">03</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Educational Background</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-y-7 md:gap-x-8">
+                  <div className="flex flex-col gap-2.5 md:col-span-2">
+                    <label className={labelClass}>Highest Qualification <span className="text-brand-orange">*</span></label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                      {['10th', '12th', 'Diploma', 'B.Tech / B.E', 'M.Tech', 'Other'].map(q => (
+                        <label key={q} className={`${radioOptionClass} min-w-0`}>
+                          <input type="radio" name="qualification" value={q} checked={courseFormData.qualification === q} onChange={handleChange} required className="absolute opacity-0" />
+                          <span>{q}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2.5 md:col-span-2">
+                    <label className={labelClass}>College / University Name <span className="text-brand-orange">*</span></label>
+                    <input type="text" name="university" className={inputBaseClass} placeholder="Enter your college or university" value={courseFormData.university} onChange={handleChange} required />
+                  </div>
+                  <div className="flex flex-col gap-2.5 md:col-span-2">
+                    <label className={labelClass}>Current Status <span className="text-brand-orange">*</span></label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {['Student', 'Graduate', 'Working Professional'].map(s => (
+                        <label key={s} className={`${radioOptionClass} min-w-0`}>
+                          <input type="radio" name="status" value={s} checked={courseFormData.status === s} onChange={handleChange} required className="absolute opacity-0" />
+                          <span>{s}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 04: Course Selection */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">04</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Course Selection</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-y-7 md:gap-x-8">
+                  <div className="flex flex-col gap-2.5 md:col-span-2">
+                    <label className={labelClass}>Select Course Category <span className="text-brand-orange">*</span></label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                      {['CAD Design', 'CAE / Simulation', 'Graphic Designing', '3D Design & Modeling', 'CAD + CAE', 'Physics of Design'].map(c => (
+                        <label key={c} className={`${radioOptionClass} min-w-0 h-auto py-4 px-2`}>
+                          <input type="radio" name="course_category" value={c} checked={courseFormData.course_category === c} onChange={handleChange} required className="absolute opacity-0" />
+                          <span className="leading-tight">{c}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2.5 md:col-span-2">
+                    <label className={labelClass}>Preferred Course <span className="text-brand-orange">*</span></label>
+                    <select name="specific_course" className={inputBaseClass} value={courseFormData.specific_course} onChange={handleChange} required>
+                      <option value="">Select a course</option>
+                      {courseFormData.course_category === 'CAD Design' && (
+                        <>
+                          <option value="AutoCAD">AutoCAD</option>
+                          <option value="SolidWorks">SolidWorks</option>
+                          <option value="CATIA">CATIA</option>
+                        </>
+                      )}
+                      {courseFormData.course_category === 'CAE / Simulation' && (
+                        <>
+                          <option value="ANSYS">ANSYS</option>
+                          <option value="HyperMesh">HyperMesh</option>
+                          <option value="CFD Simulation">CFD Simulation</option>
+                        </>
+                      )}
+                      {courseFormData.course_category === 'Graphic Designing' && (
+                        <>
+                          <option value="Graphic Design">Graphic Design</option>
+                          <option value="Motion Graphics">Motion Graphics</option>
+                          <option value="UI/UX Design">UI/UX Design</option>
+                        </>
+                      )}
+                      {courseFormData.course_category === '3D Design & Modeling' && (
+                        <>
+                          <option value="3D Modeling">3D Modeling</option>
+                          <option value="3D Rendering">3D Rendering</option>
+                          <option value="Fusion 360">Fusion 360</option>
+                        </>
+                      )}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 05: Batch & Schedule */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">05</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Batch & Schedule</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-y-7 md:gap-x-8">
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Batch Preference <span className="text-brand-orange">*</span></label>
+                    <div className="grid grid-cols-1 gap-2">
+                      {['Weekday Batch', 'Weekend Batch', 'Flexible Timing'].map(b => (
+                        <label key={b} className={`${radioOptionClass} min-w-0 justify-start px-6`}>
+                          <input type="radio" name="batch_preference" value={b} checked={courseFormData.batch_preference === b} onChange={handleChange} required className="absolute opacity-0" />
+                          <span>{b}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Start Month <span className="text-brand-orange">*</span></label>
+                    <select name="start_month" className={inputBaseClass} value={courseFormData.start_month} onChange={handleChange} required>
+                      <option value="">Select Month / Year</option>
+                      <option value="April 2026">April 2026</option>
+                      <option value="May 2026">May 2026</option>
+                      <option value="June 2026">June 2026</option>
+                      <option value="July 2026">July 2026</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 06: Experience & Goals */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">06</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Experience & Goals</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <div className="grid grid-cols-1 gap-5 md:gap-y-7">
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Experience Level <span className="text-brand-orange">*</span></label>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {['Beginner', 'Intermediate', 'Advanced'].map(l => (
+                        <label key={l} className={`${radioOptionClass} min-w-0`}>
+                          <input type="radio" name="experience_level" value={l} checked={courseFormData.experience_level === l} onChange={handleChange} required className="absolute opacity-0" />
+                          <span>{l}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Why do you want to join this course? <span className="text-brand-orange">*</span></label>
+                    <textarea name="career_goal" className={`${inputBaseClass} resize-y min-h-[120px] leading-relaxed`} placeholder="Your career goals and expectations..." value={courseFormData.career_goal} onChange={handleChange} required></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 07: Referral & Payment */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">07</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Referral & Payment</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-y-7 md:gap-x-8">
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>How did you hear about us? <span className="text-brand-orange">*</span></label>
+                    <select name="referral_source" className={inputBaseClass} value={courseFormData.referral_source} onChange={handleChange} required>
+                      <option value="">Select option</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="Friends">Friends / Referral</option>
+                      <option value="Website">Website</option>
+                      <option value="Workshop">Workshop / Webinar</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Referral Code</label>
+                    <input type="text" name="referral_code" className={inputBaseClass} placeholder="Optional" value={courseFormData.referral_code} onChange={handleChange} />
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Calculation Plan <span className="text-brand-orange">*</span></label>
+                    <div className="grid grid-cols-2 gap-3">
+                      {['Full Payment', 'Installments'].map(p => (
+                        <label key={p} className={`${radioOptionClass} min-w-0`}>
+                          <input type="radio" name="payment_plan" value={p} checked={courseFormData.payment_plan === p} onChange={handleChange} required className="absolute opacity-0" />
+                          <span>{p}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <label className={labelClass}>Coupon Code</label>
+                    <input type="text" name="coupon_code" className={inputBaseClass} placeholder="If any" value={courseFormData.coupon_code} onChange={handleChange} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 08: Declaration */}
+            <div className={formCardClass}>
+              <div className={sectionHeaderClass}>
+                <span className="font-rajdhani text-[24px] font-bold text-brand-orange opacity-80">08</span>
+                <span className="font-rajdhani text-[20px] font-semibold tracking-[1.5px] uppercase text-text-primary">Declaration</span>
+              </div>
+              <div className="p-6 md:p-9">
+                <ul className="flex flex-col gap-6 list-none m-0 p-0">
+                  <li className="flex items-start gap-4 text-[15px] text-text-secondary leading-relaxed">
+                    <div className="relative w-6 h-6 shrink-0 mt-0.5">
+                      <input type="checkbox" name="decl_accuracy" checked={courseFormData.decl_accuracy} onChange={handleChange} required className="peer opacity-0 absolute inset-0 cursor-pointer z-10 w-full h-full m-0" />
+                      <label className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center">
+                        <svg className="w-4 h-4 text-bg-deep opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      </label>
+                    </div>
+                    <span>I confirm that the information provided is correct.</span>
+                  </li>
+                  <li className="flex items-start gap-4 text-[15px] text-text-secondary leading-relaxed">
+                    <div className="relative w-6 h-6 shrink-0 mt-0.5">
+                      <input type="checkbox" name="decl_terms" checked={courseFormData.decl_terms} onChange={handleChange} required className="peer opacity-0 absolute inset-0 cursor-pointer z-10 w-full h-full m-0" />
+                      <label className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center">
+                        <svg className="w-4 h-4 text-bg-deep opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      </label>
+                    </div>
+                    <span>I agree to the terms and conditions of The Correct Steps.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-5 w-full mb-16">
+              <div className="flex gap-4 w-full max-w-[450px]">
+                <button type="button" onClick={() => setCourseStep(1)} className="flex-1 bg-bg-input text-text-primary font-rajdhani text-[18px] font-bold tracking-[1px] border-2 border-white/10 rounded-md py-4 cursor-pointer hover:border-brand-orange transition-all">BACK</button>
+                <button type="submit" disabled={isSubmitting} className="flex-[2] bg-brand-orange text-bg-deep font-rajdhani text-[20px] font-bold tracking-[2px] border-none rounded-md py-4 cursor-pointer transition-all duration-300 shadow-[0_4px_15px_rgba(245,166,35,0.2)] hover:bg-brand-hover hover:shadow-[0_8px_25px_rgba(245,166,35,0.4)] disabled:opacity-50">
+                  {isSubmitting ? 'PROCESSING...' : 'SUBMIT REGISTRATION'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </form>
+    </div>
+  )
+
   return (
     <>
       {/* Brand Header */}
@@ -142,7 +518,7 @@ function App() {
         </div>
       </header>
 
-      {view === 'home' ? renderHome() : (
+      {view === 'home' ? renderHome() : view === 'course' ? renderCourseForm() : (
         <div className="w-full max-w-[850px] mx-auto mt-[60px] px-5 animate-fade-up">
           <button
             onClick={() => setView('home')}
@@ -432,6 +808,19 @@ function App() {
                         cheque_no: '', prior_exp: '', expectations: '', decl_accuracy: false,
                         decl_rules: false
                       });
+                      setCourseFormData({
+                        name: '', dob: '', gender: '',
+                        email: '', mobile: '', alt_phone: '',
+                        city: '', state: '', pincode: '', country: 'India',
+                        qualification: '', university: '', status: '',
+                        course_category: '', specific_course: '',
+                        learning_mode: 'Online', batch_preference: '', start_month: '',
+                        experience_level: '', career_goal: '',
+                        referral_source: '', referral_code: '',
+                        payment_plan: '', coupon_code: '',
+                        decl_accuracy: false, decl_terms: false
+                      });
+                      setCourseStep(1);
                       setPaymentMethod('');
                     }}
                     className="!bg-transparent border-2 border-brand-orange !text-brand-orange font-rajdhani text-[20px] font-bold tracking-[2px] rounded-md py-4 px-8 cursor-pointer transition-all duration-300 shadow-none hover:!bg-brand-orange hover:!text-bg-deep"
