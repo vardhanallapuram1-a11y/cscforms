@@ -1,21 +1,22 @@
 :root {
-  --bg-deep: #12161f;
-  /* Deeper, darker grey-navy for exact match */
-  --bg-card: #1a1f2b;
-  /* Very dark card backgrounds */
-  --bg-section: #232936;
-  /* Section header background */
-  --border: rgba(255, 255, 255, 0.04);
-  /* Even more subtle border */
-  --orange: #f5a623;
-  /* Precise orange-gold accent */
-  --orange-glow: rgba(245, 166, 35, 0.08);
-  --text-primary: #f0f4f8;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-label: #a8bcd6;
+  --bg-deep: #2a3342;
+  /* Dark navy-grey background */
+  --bg-card: #4d5969;
+  /* Mid-tone slate for cards */
+  --bg-section: #586576;
+  /* Lighter slate for section headers */
+  --border: rgba(255, 255, 255, 0.1);
+  /* Adjusted border for better visibility */
+  --orange: #d89a4a;
+  /* Gold/mustard accent matching the swatch */
+  --orange-glow: rgba(216, 154, 74, 0.08);
+  --text-primary: #f8fafc;
+  /* Slightly brighter for better contrast */
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-label: #e2e8f0;
   --accent-blue: #38bdf8;
-  --grid-line: rgba(255, 255, 255, 0.02);
+  --grid-line: rgba(255, 255, 255, 0.03);
 }
 
 * {
