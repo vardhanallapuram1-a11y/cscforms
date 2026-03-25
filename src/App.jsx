@@ -161,7 +161,7 @@ function App() {
 
       <div className="mb-12 text-center">
         <h1 className="font-rajdhani text-[32px] md:text-[42px] font-bold uppercase tracking-[1.5px] text-text-primary mb-3 leading-tight">
-          THE CORRECT STEPS – <span className="text-brand-orange">CAD, CAE & DESIGN COURSES</span>
+          BINGE LEARNING – <span className="text-brand-orange">CAD, CAE & DESIGN</span>
         </h1>
         <div className="flex justify-center items-center gap-4 mt-8">
           <div className={`flex items-center gap-3 ${courseStep === 1 ? 'text-brand-orange' : 'text-text-muted'}`}>
@@ -507,12 +507,12 @@ function App() {
         <div className="max-w-[1200px] mx-auto py-4 md:py-5 px-4 flex justify-center items-center">
           <div className="flex items-center gap-4 cursor-pointer" onClick={() => setView('home')}>
             <img
-              src="/correct.png"
-              alt="The Correct Steps Logo"
-              className="h-[50px] md:h-[70px] w-auto object-contain"
+              src="/binge_logo.png"
+              alt="Binge Learning Logo"
+              className="h-[40px] md:h-[50px] w-auto object-contain"
             />
             <div className="font-rajdhani text-[24px] md:text-[32px] font-bold tracking-[2px] text-text-primary">
-              THE CORRECT <span className="text-brand-orange">STEPS</span>
+              BINGE <span className="text-brand-orange">LEARNING</span>
             </div>
           </div>
         </div>
@@ -833,6 +833,14 @@ function App() {
           </form>
         </div>
       )}
+
+      <footer className="w-full bg-bg-header border-t border-border-custom py-8 mt-auto">
+        <div className="max-w-[1200px] mx-auto px-4 text-center">
+          <p className="text-text-muted text-[14px] font-rajdhani font-medium tracking-[1px] uppercase">
+            &copy; 2026 The Correct Steps
+          </p>
+        </div>
+      </footer>
     </>
   )
 }
