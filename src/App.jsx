@@ -52,9 +52,17 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!formData.decl_accuracy || !formData.decl_rules) {
-      alert('Please accept both mandatory declaration checkboxes before submitting.')
-      return
+    
+    if (view === 'course') {
+      if (!courseFormData.decl_accuracy || !courseFormData.decl_terms) {
+        alert('Please accept both mandatory declaration checkboxes before submitting.')
+        return
+      }
+    } else {
+      if (!formData.decl_accuracy || !formData.decl_rules) {
+        alert('Please accept both mandatory declaration checkboxes before submitting.')
+        return
+      }
     }
     setIsSubmitting(true)
 
@@ -65,7 +73,7 @@ function App() {
     })
 
     try {
-      const res = await fetch('https://formspree.io/f/xdawnzdp', {
+      const res = await fetch('http://localhost:5000/api/submit', {
         method: 'POST',
         body: formDataToSend,
         headers: { 'Accept': 'application/json' }
@@ -159,8 +167,10 @@ function App() {
         Back to Selection
       </button>
 
-      <div className="mb-12 text-center">
-        <h1 className="font-rajdhani text-[32px] md:text-[42px] font-bold uppercase tracking-[1.5px] text-text-primary mb-3 leading-tight">
+      {!submitted ? (
+        <>
+          <div className="mb-12 text-center">
+            <h1 className="font-rajdhani text-[32px] md:text-[42px] font-bold uppercase tracking-[1.5px] text-text-primary mb-3 leading-tight">
           BINGE LEARNING – <span className="text-brand-orange">CAD, CAE & DESIGN</span>
         </h1>
         <div className="flex justify-center items-center gap-4 mt-8">
@@ -467,8 +477,8 @@ function App() {
                   <li className="flex items-start gap-4 text-[15px] text-text-secondary leading-relaxed">
                     <div className="relative w-6 h-6 shrink-0 mt-0.5">
                       <input type="checkbox" name="decl_accuracy" checked={courseFormData.decl_accuracy} onChange={handleChange} required className="peer opacity-0 absolute inset-0 cursor-pointer z-10 w-full h-full m-0" />
-                      <label className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center">
-                        <svg className="w-4 h-4 text-bg-deep opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      <label className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center peer-checked:[&>svg]:opacity-100">
+                        <svg className="w-4 h-4 text-white opacity-0 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                       </label>
                     </div>
                     <span>I confirm that the information provided is correct.</span>
@@ -476,8 +486,8 @@ function App() {
                   <li className="flex items-start gap-4 text-[15px] text-text-secondary leading-relaxed">
                     <div className="relative w-6 h-6 shrink-0 mt-0.5">
                       <input type="checkbox" name="decl_terms" checked={courseFormData.decl_terms} onChange={handleChange} required className="peer opacity-0 absolute inset-0 cursor-pointer z-10 w-full h-full m-0" />
-                      <label className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center">
-                        <svg className="w-4 h-4 text-bg-deep opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      <label className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center peer-checked:[&>svg]:opacity-100">
+                        <svg className="w-4 h-4 text-white opacity-0 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
                       </label>
                     </div>
                     <span>I agree to the terms and conditions of The Correct Steps.</span>
@@ -497,6 +507,28 @@ function App() {
           </div>
         )}
       </form>
+        </>
+      ) : (
+        <div className="text-center py-[60px] px-10 bg-bg-card rounded-lg border-t-[6px] border-t-[#2ecc71] shadow-[0_10px_30px_rgba(0,0,0,0.2)] animate-fade-up mb-16">
+          <div className="w-[80px] h-[80px] rounded-full bg-[#2ecc71]/10 text-[#2ecc71] flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <h3 className="font-rajdhani text-[32px] text-[#2ecc71] mb-4">Registration Successful</h3>
+          <p className="text-[18px] text-text-secondary">Your details have been securely transmitted to the course administration team.</p>
+          <p className="mt-4 text-[15px] text-text-muted">
+            A confirmation email will be sent to <strong className="text-text-primary">{courseFormData.email}</strong>.
+          </p>
+          <div className="mt-10 flex justify-center">
+            <button
+              type="button"
+              onClick={() => { setSubmitted(false); setView('home'); setCourseStep(1); }}
+              className="bg-bg-input text-brand-orange font-rajdhani text-[18px] font-bold tracking-[1.5px] border-2 border-brand-orange/30 rounded-md py-3 px-8 cursor-pointer transition-all hover:bg-brand-orange hover:text-bg-deep"
+            >
+              RETURN TO HOME
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 
@@ -615,13 +647,13 @@ function App() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-[1px] md:gap-[2px] bg-border-custom rounded-md overflow-hidden border border-border-custom">
                   {[
-                    { label: 'Date', name: 'date', placeholder: 'DD / MM / YYYY' },
-                    { label: 'Time', name: 'time', placeholder: 'e.g. 09:00 AM' },
-                    { label: 'Location', name: 'location', placeholder: 'Enter location' }
+                    { label: 'Date', name: 'date', type: 'date', placeholder: 'DD / MM / YYYY' },
+                    { label: 'Time', name: 'time', type: 'time', placeholder: 'e.g. 09:00 AM' },
+                    { label: 'Location', name: 'location', type: 'text', placeholder: 'Enter location' }
                   ].map((item) => (
                     <div key={item.name} className="bg-bg-input p-4 md:px-5 md:py-6 flex flex-col">
                       <div className="text-[13px] font-bold uppercase tracking-[1px] text-brand-orange mb-3">{item.label}</div>
-                      <input type="text" name={item.name} placeholder={item.placeholder} value={formData[item.name]} onChange={handleChange} className="bg-transparent border-none p-0 font-rajdhani text-[22px] font-semibold text-text-primary outline-none w-full" />
+                      <input type={item.type} name={item.name} placeholder={item.placeholder} value={formData[item.name]} onChange={handleChange} className="bg-transparent border-none p-0 font-rajdhani text-[22px] font-semibold text-text-primary outline-none w-full [color-scheme:dark]" />
                     </div>
                   ))}
                 </div>
@@ -735,8 +767,8 @@ function App() {
                     <li key={item.name} className="flex items-start gap-4 text-[15px] text-text-secondary leading-relaxed">
                       <div className="relative w-6 h-6 shrink-0 mt-0.5">
                         <input type="checkbox" name={item.name} id={item.name} checked={formData[item.name]} onChange={handleChange} required={item.required} className="peer opacity-0 absolute inset-0 cursor-pointer z-10 w-full h-full m-0" />
-                        <label htmlFor={item.name} className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center">
-                          <svg className="w-4 h-4 text-bg-deep opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                        <label htmlFor={item.name} className="absolute inset-0 bg-bg-input border-2 border-border-custom rounded transition-all duration-200 pointer-events-none peer-checked:bg-brand-orange peer-checked:border-brand-orange peer-focus:shadow-[0_0_0_3px_var(--color-brand-glow)] flex items-center justify-center peer-checked:[&>svg]:opacity-100">
+                          <svg className="w-4 h-4 text-white opacity-0 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                           </svg>
                         </label>
