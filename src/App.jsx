@@ -73,7 +73,9 @@ function App() {
     })
 
     try {
-      const res = await fetch('http://localhost:5000/api/submit', {
+      const apiUrl = import.meta.env.PROD ? '/api/submit' : 'http://localhost:5000/api/submit';
+      
+      const res = await fetch(apiUrl, {
         method: 'POST',
         body: formDataToSend,
         headers: { 'Accept': 'application/json' }

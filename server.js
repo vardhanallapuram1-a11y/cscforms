@@ -90,9 +90,13 @@ app.post('/api/submit', upload.none(), async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend Server running on http://localhost:${PORT}`);
-  if (!process.env.SMTP_USER || process.env.SMTP_USER === 'your_email@gmail.com') {
-    console.warn(`[WARNING] Set your SMTP credentials in the .env file to actually send emails!`);
-  }
-});
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Backend Server running on http://localhost:${PORT}`);
+    if (!process.env.SMTP_USER || process.env.SMTP_USER === 'your_email@gmail.com') {
+      console.warn(`[WARNING] Set your SMTP credentials in the .env file to actually send emails!`);
+    }
+  });
+}
+
+export default app;
