@@ -649,7 +649,7 @@ function App() {
                         'Graphic Designing',
                         'Physics of Design',
                         'Origami Art in robotics',
-                        'Zbrush & Blender and Rendering courses'
+                        'Zbrush & Blender and Rendering'
                       ].map(c => (
                         <label key={c} className={`${radioOptionClass} min-w-0 h-auto py-4 px-4 justify-start text-left`}>
                           <input type="radio" name="selected_course" value={c} checked={formData.selected_course === c} onChange={handleChange} required className="absolute opacity-0" />
